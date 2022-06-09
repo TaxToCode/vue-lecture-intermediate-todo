@@ -1,9 +1,11 @@
 <template>
     <div class="inputBox shadow">
         <input type="text" v-model="newToDoItem" v-on:keyup.enter="addToDo" />
-        <button v-on:click="addToDo">add</button>
+
         <span class="addContainer">
-            <i class="fas fa-plus addBtn"></i>
+            <button v-on:click="addToDo">
+                <i class="fas fa-plus"></i>
+            </button>
         </span>
     </div>
 </template>
@@ -17,13 +19,14 @@ export default {
     },
     methods: {
         addToDo: function () {
-            // 저장하는 로직
-            localStorage.setItem(this.newToDoItem, this.newToDoItem);
-            this.clearInput();
+            if (this.newToDoItem) {
+                const obj = { completed: false, item: this.newToDoItem };
+                localStorage.setItem(this.newToDoItem, JSON.stringify(obj));
+                this.clearInput();
+            }
         },
 
         clearInput: function () {
-            // 입력창 초기화 로직
             this.newToDoItem = "";
         },
     },
@@ -55,7 +58,7 @@ input:focus {
     border-radius: 0 5px 5px 0;
 }
 
-.addBten {
+.addBtn {
     color: white;
     vertical-align: middle;
 }

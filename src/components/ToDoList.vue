@@ -1,10 +1,11 @@
 <template>
     <div>
         <ul>
-            <!-- <li v-for="toDoItem in todoItems" v-bind:key="toDoItem">{{ toDoItem }}</li> -->
-            <li class="shadow">
-                {{ toDoItems[0] }}
-                <span class="removeBtn">
+            <li v-for="(toDoItem, index) in toDoItems" v-bind:key="index" class="shadow">
+                <i class="fas fa-check checkBtn" v-bind:class="{ checkBtnCompleted: toDoItem.completed }" v-on:click="toggleComplete(toDoItem)"></i>
+                <span v-bind:class="{ textCompleted: toDoItem.completed }">{{ toDoItem.item }}</span>
+                <!-- <span class="textCompleted">{{ toDoItem.item }}</span> -->
+                <span class="removeBtn" v-on:click="removeToDo(toDoItem, index)">
                     <i class="fas fa-trash"></i>
                 </span>
             </li>
@@ -12,7 +13,7 @@
     </div>
 </template>
 
-<script>
+<script scoped>
 export default {
     data: function () {
         return {
@@ -23,14 +24,24 @@ export default {
         if (localStorage.length > 0) {
             for (let i = 0; i < localStorage.length; i++) {
                 if (localStorage.key(i) !== "loglevel:webpack-dev-server") {
-                    this.toDoItems.push(localStorage.key(i));
+                    const temp = JSON.parse(localStorage.getItem(localStorage.key(i)));
+                    this.toDoItems.push(temp);
                 }
             }
         }
     },
 
     methods: {
-        removeToDo: function () {},
+        removeToDo: function (toDoItem, index) {
+            localStorage.removeItem(toDoItem);
+            this.toDoItems.splice(index, 1);
+        },
+
+        toggleComplete: function (toDoItem) {
+            toDoItem.completed = !toDoItem.completed;
+            localStorage.removeItem(toDoItem.item);
+            localStorage.setItem(toDoItem.item, JSON.stringify(toDoItem));
+        },
     },
 };
 </script>
@@ -53,7 +64,8 @@ li {
     margin-right: 5px;
 }
 
-.checkBtnCompleted {``
+.checkBtnCompleted {
+    color: #b3adad;
 }
 
 .textCompleted {
