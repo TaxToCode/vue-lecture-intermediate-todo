@@ -1,8 +1,8 @@
 <template>
     <div id="app">
         <to-do-header></to-do-header>
-        <to-do-input></to-do-input>
-        <to-do-list></to-do-list>
+        <to-do-input v-on:addToDoItem="addOneItem"></to-do-input>
+        <to-do-list v-bind:propsData="toDoItems"></to-do-list>
         <to-do-footer></to-do-footer>
     </div>
 </template>
@@ -22,6 +22,31 @@ export default {
         ToDoList,
         ToDoInput,
         ToDoFooter,
+    },
+
+    data: function () {
+        return {
+            toDoItems: [],
+        };
+    },
+
+    methods: {
+        addOneItem: function (insertedItem) {
+            const obj = { completed: false, item: insertedItem };
+            localStorage.setItem(insertedItem, JSON.stringify(obj));
+            this.toDoItems.push(obj);
+        },
+    },
+
+    created: function () {
+        if (localStorage.length > 0) {
+            for (let i = 0; i < localStorage.length; i++) {
+                if (localStorage.key(i) !== "loglevel:webpack-dev-server") {
+                    const temp = JSON.parse(localStorage.getItem(localStorage.key(i)));
+                    this.toDoItems.push(temp);
+                }
+            }
+        }
     },
 };
 </script>
