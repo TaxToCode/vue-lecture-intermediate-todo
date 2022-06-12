@@ -17,13 +17,18 @@
 export default {
     methods: {
         removeToDo: function (toDoItem, index) {
-            this.$emit("removeItem", toDoItem, index);
+            // this.$emit("removeItem", toDoItem, index);
+            this.$store.commit("removeOneItem", {
+                toDoItem,
+                index,
+            });
         },
 
         toggleComplete: function (toDoItem) {
-            toDoItem.completed = !toDoItem.completed;
-            localStorage.removeItem(toDoItem.item);
-            localStorage.setItem(toDoItem.item, JSON.stringify(toDoItem));
+            // toDoItem.completed = !toDoItem.completed;
+            // localStorage.removeItem(toDoItem.item);
+            // localStorage.setItem(toDoItem.item, JSON.stringify(toDoItem));
+            this.$store.commit("toggleComplete", toDoItem);
         },
     },
 };
