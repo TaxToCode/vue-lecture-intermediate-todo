@@ -7,14 +7,27 @@
                 <i class="fas fa-plus"></i>
             </button>
         </span>
+        <to-do-modal v-if="showModal">
+            <h3 slot="header">
+                경고
+                <button>
+                    <i class="fas fa-times closeModalBtn" @click="closeModal"></i>
+                </button>
+            </h3>
+            <h3 slot="body">무언가를 입력하세요</h3>
+            <h3 slot="footer">copy right</h3>
+        </to-do-modal>
     </div>
 </template>
 
 <script>
+import ToDoModal from "./common/ToDoModal.vue";
+
 export default {
     data: function () {
         return {
             newToDoItem: "",
+            showModal: false,
         };
     },
     methods: {
@@ -22,12 +35,22 @@ export default {
             if (this.newToDoItem) {
                 this.$emit("addToDoItem", this.newToDoItem);
                 this.clearInput();
+            } else {
+                this.showModal = !this.showModal;
             }
         },
 
         clearInput: function () {
             this.newToDoItem = "";
         },
+
+        closeModal: function () {
+            this.showModal = false;
+        },
+    },
+
+    components: {
+        ToDoModal,
     },
 };
 </script>
@@ -60,5 +83,9 @@ input:focus {
 .addBtn {
     color: white;
     vertical-align: middle;
+}
+
+.closeModalBtn {
+    color: #42b983;
 }
 </style>
