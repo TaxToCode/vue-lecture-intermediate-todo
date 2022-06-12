@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <to-do-header></to-do-header>
-        <to-do-input v-on:addToDoItem="addOneItem"></to-do-input>
+        <to-do-input></to-do-input>
         <to-do-list v-bind:propsData="toDoItems" v-on:removeItem="removeOneItem"></to-do-list>
         <to-do-footer></to-do-footer>
     </div>
@@ -31,11 +31,11 @@ export default {
     },
 
     methods: {
-        addOneItem: function (insertedItem) {
-            const obj = { completed: false, item: insertedItem };
-            localStorage.setItem(insertedItem, JSON.stringify(obj));
-            this.toDoItems.push(obj);
-        },
+        // addOneItem: function (insertedItem) {
+        //     const obj = { completed: false, item: insertedItem };
+        //     localStorage.setItem(insertedItem, JSON.stringify(obj));
+        //     this.toDoItems.push(obj);
+        // },
 
         removeOneItem: function (toDoItem, index) {
             console.log("Test");
@@ -45,14 +45,14 @@ export default {
     },
 
     created: function () {
-        if (localStorage.length > 0) {
-            for (let i = 0; i < localStorage.length; i++) {
-                if (localStorage.key(i) !== "loglevel:webpack-dev-server") {
-                    const temp = JSON.parse(localStorage.getItem(localStorage.key(i)));
-                    this.toDoItems.push(temp);
-                }
-            }
-        }
+        // if (localStorage.length > 0) {
+        //     for (let i = 0; i < localStorage.length; i++) {
+        //         if (localStorage.key(i) !== "loglevel:webpack-dev-server") {
+        //             const temp = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        //             this.toDoItems.push(temp);
+        //         }
+        //     }
+        // }
     },
 };
 </script>
