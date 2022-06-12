@@ -2,8 +2,8 @@
     <div id="app">
         <to-do-header></to-do-header>
         <to-do-input v-on:addToDoItem="addOneItem"></to-do-input>
-        <to-do-list v-bind:propsData="toDoItems"></to-do-list>
-        <to-do-footer></to-do-footer>
+        <to-do-list v-bind:propsData="toDoItems" v-on:removeItem="removeOneItem" v-on:toggleItem="toggleOneItem"></to-do-list>
+        <to-do-footer v-on:clearAll="clearAllItems"></to-do-footer>
     </div>
 </template>
 
@@ -31,10 +31,28 @@ export default {
     },
 
     methods: {
+        removeOneItem: function (toDoItem, index) {
+            localStorage.removeItem(toDoItem.item);
+            this.toDoItems.splice(index, 1);
+        },
+
         addOneItem: function (insertedItem) {
             const obj = { completed: false, item: insertedItem };
             localStorage.setItem(insertedItem, JSON.stringify(obj));
             this.toDoItems.push(obj);
+        },
+
+        toggleOneItem: function (toDoItem, index) {
+            // toDoItem.completed = !toDoItem.completed;
+            this.toDoItems[index].completed = !this.toDoItems[index].completed;
+            console.log(this.toDoItems[index]);
+            localStorage.removeItem(toDoItem.item);
+            localStorage.setItem(toDoItem.item, JSON.stringify(toDoItem));
+        },
+
+        clearAllItems: function () {
+            localStorage.clear();
+            this.toDoItems = [];
         },
     },
 
