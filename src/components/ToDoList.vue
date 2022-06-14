@@ -1,11 +1,12 @@
 <template>
     <div>
         <transition-group name="list" tag="ul">
-            <li v-for="(toDoItem, index) in this.$store.state.toDoItems" v-bind:key="index" class="shadow">
+            <li v-for="(toDoItem, index) in this.storedToDoItems" v-bind:key="index" class="shadow">
                 <i class="fas fa-check checkBtn" v-bind:class="{ checkBtnCompleted: toDoItem.completed }" v-on:click="toggleComplete(toDoItem)"></i>
                 <span v-bind:class="{ textCompleted: toDoItem.completed }">{{ toDoItem.item }}</span>
                 <!-- <span class="textCompleted">{{ toDoItem.item }}</span> -->
-                <span class="removeBtn" v-on:click="removeToDo(toDoItem, index)">
+                <!-- <span class="removeBtn" v-on:click="removeToDo(toDoItem, index)"> -->
+                <span class="removeBtn" v-on:click="removeToDo({toDoItem, index})">
                     <i class="fas fa-trash"></i>
                 </span>
             </li>
@@ -14,23 +15,43 @@
 </template>
 
 <script scoped>
+import { mapGetters, mapMutations } from 'vuex';
+
+
 export default {
     methods: {
-        removeToDo: function (toDoItem, index) {
-            // this.$emit("removeItem", toDoItem, index);
-            this.$store.commit("removeOneItem", {
-                toDoItem,
-                index,
-            });
-        },
+        ...mapMutations({
+            removeToDo : "removeOneItem",
+            toggleComplete : "toggleComplete",
+        })
 
-        toggleComplete: function (toDoItem) {
-            // toDoItem.completed = !toDoItem.completed;
-            // localStorage.removeItem(toDoItem.item);
-            // localStorage.setItem(toDoItem.item, JSON.stringify(toDoItem));
-            this.$store.commit("toggleComplete", toDoItem);
-        },
+        // removeToDo: function (toDoItem, index) {
+        //     // this.$emit("removeItem", toDoItem, index);
+        //     this.$store.commit("removeOneItem", {
+        //         toDoItem,
+        //         index,
+        //     });
+        // },
+
+        // toggleComplete: function (toDoItem) {
+        //     // toDoItem.completed = !toDoItem.completed;
+        //     // localStorage.removeItem(toDoItem.item);
+        //     // localStorage.setItem(toDoItem.item, JSON.stringify(toDoItem));
+        //     this.$store.commit("toggleComplete", toDoItem);
+        // },
     },
+
+    computed: {
+        // toDoItem(){
+        //     return this.$store.getters.storedToDoItems
+        // }
+        ...mapGetters(["storedToDoItems"]),
+
+        // ...mapGetters({
+        //     todoItems : "storedToDoItems",
+        // }),
+        
+    }
 };
 </script>
 
